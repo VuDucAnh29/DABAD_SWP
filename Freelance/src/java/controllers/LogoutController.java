@@ -6,43 +6,39 @@
 package controllers;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
- * @author Utech
+ * @author Dell
  */
-@WebServlet(name = "MainController", urlPatterns = {"/MainController"})
-public class MainController extends HttpServlet {
+@WebServlet(name = "LogoutController", urlPatterns = {"/LogoutController"})
+public class LogoutController extends HttpServlet {
 
-    private static final String ERROR = "Error.jsp";
-    private static final String LOGIN_CONTROLLER = "LoginController";
-    private static final String LOGIN = "Login";
-    private static final String LOGOUT = "Logout";
-    private static final String LOGOUT_CONTROLLER = "LogoutController";
+    private static String ERROR = "login.jsp";
+    private static String SUCCESS = "login.jsp";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-
         String url = ERROR;
         try {
-            String action = request.getParameter("action");
-            if (LOGIN.equals(action)) {
-                url = LOGIN_CONTROLLER;
-            } else if (LOGOUT.equals(action)) {
-                url = LOGOUT_CONTROLLER;
+            HttpSession session = request.getSession();
+            if (session != null) {
+                session.invalidate();
+                url = SUCCESS;
             }
         } catch (Exception e) {
-            log("Error at MainController" + e.toString());
+            log("Error at LogoutController: " + e.toString());
         } finally {
-            request.getRequestDispatcher(url).forward(request, response);
+            response.sendRedirect(url);
         }
-
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

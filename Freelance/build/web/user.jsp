@@ -25,5 +25,6 @@
         Full Name : <%= loginUser.getFullName()%>  <br>
         Role : <%= loginUser.getRoleID()%> <br>
         Password : <%= loginUser.getPassword()%> <br>
+        <a href="MainController?action=Logout">Logout</a>
     </body>
 </html>

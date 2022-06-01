@@ -26,7 +26,7 @@ public class DBUtils {
 //        String databaseName = "FoodManagement";
 //        String user = "sa";
 //        String password = "M!nhduc2102";
-//        Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+        Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
 //        String url = ("jdbc:sqlserver://localhost:1433;databaseName=" + databaseName);
 
         conn = DriverManager.getConnection(url, user, password);

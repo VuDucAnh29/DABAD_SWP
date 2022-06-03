@@ -17,7 +17,8 @@ import ultis.DBUtils;
  * @author Utech
  */
 public class UserDAOImpl implements UserDAO {
-
+    
+    private static final String CREATE = "INSERT INTO UserAccount ([Email], [Password], [FullName], [Avatar], [RoleID], [CreateDate], [UpdateDate], [Balance], [Status]) Values (?,?,?,?,?,?,?,?,1)";
     private static final String LOGIN = "SELECT fullName, roleID FROM UserAccount WHERE email=? AND password=?";
 
     @Override
@@ -37,7 +38,7 @@ public class UserDAOImpl implements UserDAO {
                 if (rs.next()) {
                     String fullName = rs.getString("fullname");
                     String roleID = rs.getString("roleID");
-                    user = new UserDTO(email, fullName, roleID, password);
+                    user = new UserDTO(roleID, fullName, roleID, password, email, email, CREATE, CREATE, 0);
                 };
             }
         } catch (Exception e) {
@@ -73,7 +74,33 @@ public class UserDAOImpl implements UserDAO {
 
     @Override
     public boolean create(UserDTO user) throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        boolean check = false;
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        try {
+            conn = DBUtils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(CREATE);
+                ptm.setString(1, user.getEmail());
+                ptm.setString(2, user.getPassword());
+                ptm.setString(3, user.getFullName());
+                ptm.setString(4, user.getAvatar());
+                ptm.setString(5, user.getRoleID());
+                ptm.setString(6, user.getCreateDate());
+                ptm.setString(7, user.getUpdateDate());
+                ptm.setDouble(8, 0);
+                check = ptm.executeUpdate() > 0 ? true : false;
+            }
+        } catch (Exception e) {
+        } finally {
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return check;
     }
 
 }

@@ -26,7 +26,5 @@
             }
         %>
         <%= error %>
-        <a href="create.jsp"> create a new user</a>   
-        <a href="shopping.jsp"> Shopping </a>  
     </body>
 </html>

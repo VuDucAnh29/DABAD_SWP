@@ -17,17 +17,12 @@ public class DBUtils {
 
     public static Connection getConnection() throws ClassNotFoundException, SQLException {
         Connection conn = null;
-        
+
         String databaseName = "FreelancePlatform";
         String user = "admin";
         String password = "DABAD1234567890";
-        String url = ("jdbc:sqlserver://it-freelancer.caauhn1cbnja.ap-southeast-1.rds.amazonaws.com:1433;databaseName=" +databaseName);
-
-//        String databaseName = "FoodManagement";
-//        String user = "sa";
-//        String password = "M!nhduc2102";
-//        Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-//        String url = ("jdbc:sqlserver://localhost:1433;databaseName=" + databaseName);
+        String url = ("jdbc:sqlserver://it-freelancer.caauhn1cbnja.ap-southeast-1.rds.amazonaws.com:1433;databaseName=" + databaseName);
+        Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
 
         conn = DriverManager.getConnection(url, user, password);
 

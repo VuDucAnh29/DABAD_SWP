@@ -19,9 +19,9 @@ public class DBUtils {
         Connection conn = null;
 
         String databaseName = "FreelancePlatform";
-        String user = "admin";
-        String password = "DABAD1234567890";
-        String url = ("jdbc:sqlserver://it-freelancer.caauhn1cbnja.ap-southeast-1.rds.amazonaws.com:1433;databaseName=" + databaseName);
+        String user = "sa";
+        String password = "M!nhduc2102";
+        String url = ("jdbc:sqlserver://13.212.197.27:1433;databaseName=" + databaseName);
         Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
 
         conn = DriverManager.getConnection(url, user, password);

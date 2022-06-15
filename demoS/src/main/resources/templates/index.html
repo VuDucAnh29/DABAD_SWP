@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+<link th:rel="stylesheet"
+	th:href="@{/webjars/bootstrap/4.0.0-2/css/bootstrap.min.css} " />
+</head>
+<body>
+	<a href="new">Create</a>
+	<table class="table">
+		<thead>
+			<tr>
+				<th>ID</th>
+				<th>Name</th>
+				<th>Email</th>
+				<th>Balance</th>
+				<th>Password</th>
+				<th>roleID</th>
+				<th>createDate</th>
+				<th>updateDate</th>
+				<th>Status</th>
+				<th>Action</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="user :${userAccountList}">
+				<td th:text="${user.id}"></td>
+				<td th:text="${user.fullName}"></td>
+				<td th:text="${user.email}"></td>
+				<td th:text="${user.balance}"></td>
+				<td th:text="${user.password}"></td>
+				<td th:text="${user.roleId}"></td>
+				<td th:text="${user.createDate}"></td>
+				<td th:text="${user.updateDate}"></td>
+				<td th:text="${user.status}"></td>
+				<td>
+					<a th:href="@{'/user/edit/' + ${user.id}}">EDIT</a> 
+					<a th:href="@{'/user/delete/' + ${user.id}}">DELETE</a>
+				</td>
+			</tr>
+		</tbody>
+
+	</table>
+</body>
+</html>

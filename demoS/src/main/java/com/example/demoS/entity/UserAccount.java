@@ -4,12 +4,17 @@ package com.example.demoS.entity;
 
 import java.util.HashSet;
 import java.util.Set;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -26,7 +31,7 @@ public class UserAccount {
 	private String password;
 	private String fullName;
 	private String avatar;
-	private int roleId;
+	private Set<Role> roles = new HashSet<>(0);
 	private String createDate;
 	private String updateDate;
 	private double balance;
@@ -37,18 +42,18 @@ public class UserAccount {
 	public UserAccount() {
 	}
 
-	public UserAccount(long id, String email, String password, String fullName, int roleId, double balance,
+	public UserAccount(long id, String email, String password, String fullName, Set<Role> roleId, double balance,
 			int status) {
 		this.id = id;
 		this.email = email;
 		this.password = password;
 		this.fullName = fullName;
-		this.roleId = roleId;
+		this.roles = roleId;
 		this.balance = balance;
 		this.status = status;
 	}
 
-	public UserAccount(long id, String email, String password, String fullName, String avatar, int roleId,
+	public UserAccount(long id, String email, String password, String fullName, String avatar, Set<Role> roleId,
 			String createDate, String updateDate, double balance, int status, Set<FreelancerAccount> freelancerAccounts,
 			Set<CustomerAccount> customerAccounts) {
 		this.id = id;
@@ -56,7 +61,7 @@ public class UserAccount {
 		this.password = password;
 		this.fullName = fullName;
 		this.avatar = avatar;
-		this.roleId = roleId;
+		this.roles = roleId;
 		this.createDate = createDate;
 		this.updateDate = updateDate;
 		this.balance = balance;
@@ -85,7 +90,7 @@ public class UserAccount {
 		this.email = email;
 	}
 
-	@Column(name = "Password", nullable = false, length = 32)
+	@Column(name = "Password")
 	public String getPassword() {
 		return this.password;
 	}
@@ -112,13 +117,18 @@ public class UserAccount {
 		this.avatar = avatar;
 	}
 
-	@Column(name = "RoleID", nullable = false)
-	public int getRoleId() {
-		return this.roleId;
+	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "users_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+            )
+	public Set<Role> getRoles() {
+		return this.roles;
 	}
 
-	public void setRoleId(int roleId) {
-		this.roleId = roleId;
+	public void setRoles(Set<Role> roles) {
+		this.roles = roles;
 	}
 
 

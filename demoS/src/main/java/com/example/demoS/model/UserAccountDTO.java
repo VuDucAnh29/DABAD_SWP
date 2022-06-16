@@ -17,6 +17,7 @@ public class UserAccountDTO {
     private String CreateDate;
     private String UpdateDate;
     private double Balance;
+    private int status;
 }
 
 

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
 <meta charset="ISO-8859-1">
 <title>Insert title here</title>
@@ -36,11 +37,6 @@
 			</tr>
 			
 			<tr>
-				<td>role :</td>
-				<td><input type="text" th:field="*{roleId}"/></td>
-			</tr>
-			
-			<tr>
 				<td>status</td>
 				<td><input type="text" id="status" name="status" value="1"/></td>
 			</tr>
@@ -56,6 +52,7 @@
 			</tr>
 			
 			<tr>
+				<td></td>
 				<td colspan="2"><button type="submit">Save</button></td>
 			</tr>
 		</table>

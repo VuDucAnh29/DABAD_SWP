@@ -7,9 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.example.demoS.entity.UserAccount;
+import com.example.demoS.repository.RoleRepository;
 import com.example.demoS.repository.UserAccountRepository;
 import com.example.demoS.service.UserAccountService;
 
@@ -18,13 +20,23 @@ import com.example.demoS.service.UserAccountService;
 public class UserAccountServiceImpl implements UserAccountService{
 	@Autowired
 	private UserAccountRepository userAccountRepository;
+	
+	@Autowired
+	private RoleRepository roleRepository;
 
+	@Autowired
+	private BCryptPasswordEncoder encoder;
+	
 	public UserAccountServiceImpl(UserAccountRepository userAccountRepository) {
 		this.userAccountRepository = userAccountRepository;
 	}
+	
 
 	@Override
 	public <S extends UserAccount> S save(S entity) {
+		Long idUser = (long) 2;
+		entity.getRoles().add(roleRepository.getRoleById(idUser));
+		entity.setPassword(encoder.encode(entity.getPassword()));
 		return userAccountRepository.save(entity);
 	}
 
@@ -82,6 +94,7 @@ public class UserAccountServiceImpl implements UserAccountService{
 	public UserAccount getById(Long id) {
 		return userAccountRepository.getById(id);
 	}
+	
 	
 	
 }

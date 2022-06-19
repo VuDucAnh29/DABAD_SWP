@@ -23,7 +23,7 @@ public class CustomerAuthenticationInterceptor implements HandlerInterceptor {
 		}
 		
 		session.setAttribute("redirect-uri", request.getRequestURI());
-		response.sendRedirect("/signin");
+		response.sendRedirect("/");
 		
 		return false;
 	}

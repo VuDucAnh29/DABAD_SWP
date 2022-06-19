@@ -12,7 +12,7 @@
             <form th:action="@{/customer/jobs/save}" method="post" th:object="${job}" enctype="multipart/form-data">
                 <div class="card">
                     <div class="card-header">
-                        <h2>Add new job</h2>
+                        <h2>Edit job</h2>
                     </div>
                     <div class="card-body">
                         <div class="row">
@@ -50,7 +50,7 @@
                                 <div class="form-group">
                                     <label for="fieldId">Field</label>
                                     <select class="form-control" name="fieldId" id="fieldId" th:field="*{fieldId}">
-                                        <option th:each="item:${fields}" th:value="${item.fieldId}"
+                                        <option th:each="item:${fields}" th:value="${item.fieldId}" th:classappend="${job.fieldId == item.fieldId}? selected : ''"
                                             th:text="${item.name}">Field</option>
                                     </select>
                                 </div>
@@ -63,7 +63,7 @@
                                         <th:block th:each="tech : ${techs}" class="form-check-label">
                                             <div class="checkbox">
                                                 <input class="checkboxInput" type="checkbox" th:name="techChecked"
-                                                    th:value="${tech.name}" />
+                                                    th:value="${tech.name}" th:checked="${job.techs.contains(tech.name)}"/>
                                                 <label th:text="${tech.name}"></label> <br />
                                             </div>
                                         </th:block>

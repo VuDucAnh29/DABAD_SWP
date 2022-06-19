@@ -65,7 +65,7 @@ public class SignInController {
 		
 		if(ruri != null) {
 			session.removeAttribute("redirect-url");
-			return new ModelAndView("redirect:"+ruri);
+			return new ModelAndView("forward:/customer/", model);
 		}
 		
 		return new ModelAndView("forward:/customer/", model);

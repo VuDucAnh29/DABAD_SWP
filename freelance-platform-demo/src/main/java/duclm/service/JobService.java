@@ -82,4 +82,8 @@ public interface JobService {
 
 	List<Job> findAllByUserId(Long userId);
 
+	List<Job> findAllByStatus(int status);
+
+	<S extends Job> S saveWithStatus0(S entity);
+
 }

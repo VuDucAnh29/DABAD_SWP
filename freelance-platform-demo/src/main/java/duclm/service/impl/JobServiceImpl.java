@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
@@ -13,6 +15,7 @@ import org.springframework.data.repository.query.FluentQuery.FetchableFluentQuer
 import org.springframework.stereotype.Service;
 
 import duclm.domain.Job;
+import duclm.domain.User;
 import duclm.repository.JobRepository;
 import duclm.service.JobService;
 
@@ -20,9 +23,26 @@ import duclm.service.JobService;
 public class JobServiceImpl implements JobService {
 	@Autowired
 	JobRepository jobRepository;
+	
+	@Autowired
+	HttpSession session;
+	
+	@Override
+	public List<Job> findAllByStatus(int status){
+		return jobRepository.findAllByStatus(status);
+	}
 
 	@Override
 	public <S extends Job> S save(S entity) {
+		entity.setStatus(1);
+
+		return jobRepository.save(entity);
+	}
+	
+	@Override
+	public <S extends Job> S saveWithStatus0(S entity) {
+		entity.setStatus(0);
+
 		return jobRepository.save(entity);
 	}
 
@@ -45,7 +65,7 @@ public class JobServiceImpl implements JobService {
 	public Page<Job> findAll(Pageable pageable) {
 		return jobRepository.findAll(pageable);
 	}
-
+	
 	@Override
 	public List<Job> findAll(Sort sort) {
 		return jobRepository.findAll(sort);

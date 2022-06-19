@@ -13,6 +13,9 @@ import duclm.domain.Job;
 @Repository
 public interface JobRepository extends JpaRepository<Job, Long> {
 
-	@Query(value = "SELECT * FROM jobs j WHERE j.user_id = :userid", nativeQuery = true)
+	@Query(value = "SELECT * FROM jobs j WHERE j.user_id = :userid AND j.status=1", nativeQuery = true)
 	List<Job> findAllJobByUserParam(@Param("userid") Long userid);
+	
+	List<Job> findAllByStatus(int status);
+
 }

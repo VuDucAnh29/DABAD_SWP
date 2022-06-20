@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{dashboardLayout.html}">
+
+<head>
+
+</head>
+
+<body>
+    <section class="row" layout:fragment="content">
+        <div class="col mt-4">
+            <form th:action="@{/customer/jobs/save}" method="post" th:object="${job}" enctype="multipart/form-data">
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Add new job</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-7">
+                                <input type="hidden" th:field="*{jobId}">
+                                <div class="form-group">
+                                    <label for="title">Title</label>
+                                    <input type="text" class="form-control" name="title" id="title" th:field="*{title}"
+                                        aria-describedby="titleHid" placeholder="Title">
+                                </div>
+                                <div class="form-group">
+                                    <label for="scopeId">Scope</label>
+                                    <select class="form-control" name="scope" id="scope" th:field="*{scope}">
+                                        <option th:each="item:${scopes}" th:value="${item}" th:text="${item}">Scope
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="durationId">Duration</label>
+                                    <select class="form-control" name="duration" id="duration" th:field="*{duration}">
+                                        <option th:each="item:${durations}" th:value="${item}" th:text="${item}">
+                                            Duration</option>
+                                    </select>
+                                </div>
+
+                            </div>
+                            <div class="col-3">
+                                <div class="input-group form-group">
+                                    <span class="input-group-text">Budget</span>
+                                    <input th:field="*{budget}" type="number" name="budget" id="budget"
+                                        class="form-control" placeholder="Budget">
+                                    <span class="input-group-text">VND</span>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="fieldId">Field</label>
+                                    <select class="form-control" name="fieldId" id="fieldId" th:field="*{fieldId}">
+                                        <option th:each="item:${fields}" th:value="${item.fieldId}"
+                                            th:text="${item.name}">Field</option>
+                                    </select>
+                                </div>
+
+
+                                <div class="form-check">
+                                    <label for="">Add tags for this project</label> <br />
+                                    <input type="text" value="" name="searchColumn" id="searchColumn" />
+                                    <div style="overflow-x: scroll; height: 200px;">
+                                        <th:block th:each="tech : ${techs}" class="form-check-label">
+                                            <div class="checkbox">
+                                                <input class="checkboxInput" type="checkbox" th:name="techChecked"
+                                                    th:value="${tech.name}" />
+                                                <label th:text="${tech.name}"></label> <br />
+                                            </div>
+                                        </th:block>
+                                    </div>
+                                </div>
+                                <div>
+                                    <p id="valueList"></p>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label for="description">Description</label>
+                                    <textarea th:field="*{description}" class="form-control" name="description"
+                                        id="description" rows="5"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer text-muted">
+                        <button class="btn btn-primary">Save</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </section>
+</body>
+
+</html>

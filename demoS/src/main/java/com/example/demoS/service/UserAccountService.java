@@ -13,6 +13,7 @@ import com.example.demoS.entity.UserAccount;
 
 
 
+
 @Service
 public interface UserAccountService {
 
@@ -38,6 +39,12 @@ public interface UserAccountService {
 
 	List<UserAccount> findAll();
 
+	<S extends UserAccount> S save(S entity, String roleName);
+	
 	<S extends UserAccount> S save(S entity);
+	
+	<S extends UserAccount> S deActive(S entity);
+	
+	 UserAccount getByEmail(String email);
 
 }

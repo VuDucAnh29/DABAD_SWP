@@ -1,5 +1,7 @@
 package com.example.demoS.service.impl;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,6 +16,7 @@ import com.example.demoS.entity.UserAccount;
 import com.example.demoS.repository.RoleRepository;
 import com.example.demoS.repository.UserAccountRepository;
 import com.example.demoS.service.UserAccountService;
+
 
 
 @Service
@@ -31,14 +34,33 @@ public class UserAccountServiceImpl implements UserAccountService{
 		this.userAccountRepository = userAccountRepository;
 	}
 	
-
 	@Override
-	public <S extends UserAccount> S save(S entity) {
-		Long idUser = (long) 2;
-		entity.getRoles().add(roleRepository.getRoleById(idUser));
+	public <S extends UserAccount> S save(S entity) { 
+        String currentDate = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
+		entity.setUpdateDate(currentDate);
 		entity.setPassword(encoder.encode(entity.getPassword()));
 		return userAccountRepository.save(entity);
 	}
+	
+	
+	@Override
+	public <S extends UserAccount> S save(S entity, String roleName) { 
+        String currentDate = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
+		entity.getRoles().add(roleRepository.getRoleByName(roleName));
+		entity.setUpdateDate(currentDate);
+		entity.setPassword(encoder.encode(entity.getPassword()));
+		return userAccountRepository.save(entity);
+	}
+	
+	@Override
+	public <S extends UserAccount> S deActive(S entity) {
+		entity.setStatus(0);
+		return userAccountRepository.save(entity);
+	}
+	
+	public UserAccount getByEmail(String email){
+        return userAccountRepository.findByEmail(email);
+    }
 
 	@Override
 	public List<UserAccount> findAll() {
@@ -94,6 +116,9 @@ public class UserAccountServiceImpl implements UserAccountService{
 	public UserAccount getById(Long id) {
 		return userAccountRepository.getById(id);
 	}
+
+
+
 	
 	
 	

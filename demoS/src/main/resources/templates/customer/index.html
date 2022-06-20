@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+	<table class="table">
+		<thead>
+			<tr>
+				<th>ID</th>
+				<th>Name</th>
+				<th>Email</th>
+				<th>Balance</th>
+				<th>createDate</th>
+				<th>updateDate</th>
+				<th>Status</th>
+				<th>Company</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="customer :${customerAccount}">
+				<td th:text="${customer.userAccount.id}"></td>
+				<td th:text="${customer.userAccount.fullName}"></td>
+				<td th:text="${customer.userAccount.email}"></td>
+				<td th:text="${customer.userAccount.balance}"></td>
+				<td th:text="${customer.userAccount.createDate}"></td>
+				<td th:text="${customer.userAccount.updateDate}"></td>
+				<td th:text="${customer.userAccount.status}"></td>
+				<td th:text="${customer.company.name}"></td>
+				<td th:text="${customer.company.location}"></td>
+			</tr>
+		</tbody>
+
+	</table>
+</body>
+</html>

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+<meta charset="ISO-8859-1">
+
+<title>Insert title here</title>
+<link th:rel="stylesheet"
+	th:href="@{/webjars/bootstrap/4.0.0-2/css/bootstrap.min.css} " />
+</head>
+<body>
+	<h1>hello</h1>
+	<div sec:authorize="hasAnyAuthority('ADMIN')">
+	<a class="btn btn-sm btn-outline-primary m-2 float-right" href="user">user management</a>
+	<a class="btn btn-sm btn-outline-primary m-2 float-right" href="user">View My Project List</a>
+	<a class="btn btn-sm btn-outline-primary m-2 float-right" href="user">View All Project List</a>
+	</div>
+	<h1>Current User : </h1>
+	<h2 th:text="${currentUser.id}"></h2>
+	<h2 th:text="${currentUser.email}"></h2>
+	
+</body>
+</html>

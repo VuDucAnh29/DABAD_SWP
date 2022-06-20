@@ -81,7 +81,7 @@ public class UserAccount {
 		this.id = id;
 	}
 
-	@Column(name = "Email", nullable = false, length = 128)
+	@Column(name = "Email", nullable = false, length = 128,  unique = true)
 	public String getEmail() {
 		return this.email;
 	}

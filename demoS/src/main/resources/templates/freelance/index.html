@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+<link th:rel="stylesheet"
+	th:href="@{/webjars/bootstrap/4.0.0-2/css/bootstrap.min.css} " />
+</head>
+<body>
+
+	<table class="table">
+		<thead>
+			<tr>
+				<th>ID</th>
+				<th>Name</th>
+				<th>Email</th>
+				<th>Balance</th>
+				<th>Password</th>
+				<th>createDate</th>
+				<th>updateDate</th>
+				<th>Status</th>
+				<th>TEch</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="freelance :${freelancerAccount}">
+				<td th:text="${freelance.userAccount.id}"></td>
+				<td th:text="${freelance.userAccount.fullName}"></td>
+				<td th:text="${freelance.userAccount.email}"></td>
+				<!-- <td th:text="${user.roles}"></td> -->
+				<td th:text="${freelance.userAccount.balance}"></td>
+				<td th:text="${freelance.userAccount.password}"></td>
+				<td th:text="${freelance.userAccount.createDate}"></td>
+				<td th:text="${freelance.userAccount.updateDate}"></td>
+				<td th:text="${freelance.userAccount.status}"></td>
+				<td>
+					<p th:each="tech :${techList}"  th:text="${tech}"></p>
+				</td>
+			</tr>
+
+		</tbody>
+
+	</table>
+</body>
+</html>

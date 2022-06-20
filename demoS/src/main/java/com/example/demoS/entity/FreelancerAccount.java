@@ -4,11 +4,17 @@ package com.example.demoS.entity;
 
 import java.util.HashSet;
 import java.util.Set;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -23,8 +29,7 @@ public class FreelancerAccount  {
 	private long id;
 	private UserAccount userAccount;
 	private String overview;
-	private Set<Skill> skills = new HashSet<Skill>(0);
-	private Set<Tag> tags = new HashSet<Tag>(0);
+	private Set<Tech> tech = new HashSet<Tech>(0);
 	private Set<Transactions> transactionses = new HashSet<Transactions>(0);
 	private Set<Report> reports = new HashSet<Report>(0);
 	private Set<Apply> applies = new HashSet<Apply>(0);
@@ -37,13 +42,12 @@ public class FreelancerAccount  {
 		this.userAccount = userAccount;
 	}
 
-	public FreelancerAccount(long id, UserAccount userAccount, String overview, Set<Skill> skills, Set<Tag> tags,
+	public FreelancerAccount(long id, UserAccount userAccount, String overview, Set<Tech> tech, 
 			Set<Transactions> transactionses, Set<Report> reports, Set<Apply> applies) {
 		this.id = id;
 		this.userAccount = userAccount;
 		this.overview = overview;
-		this.skills = skills;
-		this.tags = tags;
+		this.tech = tech;
 		this.transactionses = transactionses;
 		this.reports = reports;
 		this.applies = applies;
@@ -51,7 +55,7 @@ public class FreelancerAccount  {
 
 	@Id
 
-	@Column(name = "ID", unique = true, nullable = false)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	public long getId() {
 		return this.id;
 	}
@@ -79,23 +83,20 @@ public class FreelancerAccount  {
 		this.overview = overview;
 	}
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "freelancerAccount")
-	public Set<Skill> getSkills() {
-		return this.skills;
+	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "freelances_techs",
+            joinColumns = @JoinColumn(name = "freelance_id"),
+            inverseJoinColumns = @JoinColumn(name = "tech_id")
+            )
+	public Set<Tech> getTech() {
+		return this.tech;
 	}
 
-	public void setSkills(Set<Skill> skills) {
-		this.skills = skills;
+	public void setTech(Set<Tech> tech) {
+		this.tech = tech;
 	}
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "freelancerAccount")
-	public Set<Tag> getTags() {
-		return this.tags;
-	}
-
-	public void setTags(Set<Tag> tags) {
-		this.tags = tags;
-	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "freelancerAccount")
 	public Set<Transactions> getTransactionses() {

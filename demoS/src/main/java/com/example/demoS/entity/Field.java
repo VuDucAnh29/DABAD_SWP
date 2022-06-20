@@ -7,6 +7,8 @@ import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -21,7 +23,6 @@ public class Field {
 	private long id;
 	private String name;
 	private String description;
-	private Set<Tech> teches = new HashSet<Tech>(0);
 	private Set<Project> projects = new HashSet<Project>(0);
 
 	public Field() {
@@ -33,17 +34,16 @@ public class Field {
 		this.description = description;
 	}
 
-	public Field(long id, String name, String description, Set<Tech> teches, Set<Project> projects) {
+	public Field(long id, String name, String description, Set<Project> projects) {
 		this.id = id;
 		this.name = name;
 		this.description = description;
-		this.teches = teches;
 		this.projects = projects;
 	}
 
 	@Id
 
-	@Column(name = "ID", unique = true, nullable = false)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	public long getId() {
 		return this.id;
 	}
@@ -70,14 +70,6 @@ public class Field {
 		this.description = description;
 	}
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "field")
-	public Set<Tech> getTeches() {
-		return this.teches;
-	}
-
-	public void setTeches(Set<Tech> teches) {
-		this.teches = teches;
-	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "field")
 	public Set<Project> getProjects() {

@@ -21,15 +21,19 @@
 		</thead>
 		<tbody>
 			<tr th:each="customer :${customerAccount}">
-				<td th:text="${customer.userAccount.id}"></td>
+				<td th:text="${customer.id}"></td>
 				<td th:text="${customer.userAccount.fullName}"></td>
 				<td th:text="${customer.userAccount.email}"></td>
 				<td th:text="${customer.userAccount.balance}"></td>
 				<td th:text="${customer.userAccount.createDate}"></td>
 				<td th:text="${customer.userAccount.updateDate}"></td>
 				<td th:text="${customer.userAccount.status}"></td>
+				<td th:text="${customer.company.id}"></td>
 				<td th:text="${customer.company.name}"></td>
 				<td th:text="${customer.company.location}"></td>
+				<td>
+					<a th:href="@{'/customer/edit/' + ${customer.id}}">EDIT</a>
+				</td>
 			</tr>
 		</tbody>
 

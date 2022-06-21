@@ -10,7 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import com.example.demoS.entity.CustomerAccount;
+
 import com.example.demoS.entity.FreelancerAccount;
 import com.example.demoS.entity.UserAccount;
 import com.example.demoS.repository.FreelanceAccountRepository;

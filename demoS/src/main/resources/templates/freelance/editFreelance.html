@@ -9,15 +9,14 @@
 </head>
 <body>
 
-	<form action="#" th:action="@{/freelance/save}" method="post">
-
+	<form action="#" th:action="@{/freelance/save}" th:object="${freelanceAccount}" method="post">
 		<div th:object="${userAccount}">
 			<table id="table-1">
 				<tr>
-					<td>ID :</td>
-					<td><input type="text" th:field="*{id}" readonly="readonly" /></td>
-				</tr>
-
+						<td>ID :</td>
+						<td><input type="text" th:field="*{id}" readonly="readonly" /></td>
+					</tr>
+			
 				<tr>
 					<td>Avatar :</td>
 					<td><input type="text" th:field="*{avatar}" /></td>
@@ -64,14 +63,13 @@
 					<td colspan="2"></td>
 				</tr>
 
-
 			</table>
 		</div>
 
 		<div>
 			<label for="description">Description</label>
-			<textarea class="form-control" name="description" id="description"
-				rows="5"></textarea>
+			<textarea class="form-control" th:object="${freelanceOverview}"
+				name="description" id="description" th:value="${freelanceOverview}" th:text="${freelanceOverview}" rows="5"></textarea>
 		</div>
 
 		<div th:object="${techs}">
@@ -80,12 +78,13 @@
 			<th:block th:each="tech : ${techList}" class="form-check-label">
 				<div class="checkbox">
 					<input class="checkboxInput" type="checkbox" th:name="techChecked"
-						th:value="${tech.name}" /> 
+						th:value="${tech.name}" th:checked="${freelanceTech.contains(tech.name)}"/> 
 						<label th:text="${tech.name}"></label>
 					<br />
 				</div>
 			</th:block>
 		</div>
+		<input type="text" th:id="${freelanceAccount.id}" th:value="${freelanceAccount.id}" th:name="freelanceId" readonly="readonly" >
 		<button type="submit">Save</button>
 	</form>
 	<script>

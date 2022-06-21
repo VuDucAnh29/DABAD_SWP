@@ -20,7 +20,8 @@
 				<th>createDate</th>
 				<th>updateDate</th>
 				<th>Status</th>
-				<th>TEch</th>
+				<th>Tech</th>
+				
 			</tr>
 		</thead>
 		<tbody>
@@ -36,6 +37,9 @@
 				<td th:text="${freelance.userAccount.status}"></td>
 				<td>
 					<p th:each="tech :${techList}"  th:text="${tech}"></p>
+				</td>
+				<td>
+					<a th:href="@{'/freelance/edit/' + ${freelance.id}}">EDIT</a>
 				</td>
 			</tr>
 

@@ -65,9 +65,7 @@ public class UserAccountController extends AbstractController{
 		Role role = roleService.getRoleById(roleID);
 		Set<Role> roles = new HashSet<>(0);
 		roles.add(role);
-		
 		entity.setRoles(roles);
-		
 		
 		userService.save(entity);
 		return "redirect:/user";

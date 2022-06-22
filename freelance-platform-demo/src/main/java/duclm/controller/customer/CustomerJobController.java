@@ -8,6 +8,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
@@ -15,6 +17,10 @@ import javax.validation.Valid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -94,12 +100,52 @@ public class CustomerJobController {
 		return Arrays.asList("Less than 1 month","1 to 3 months","3 to 6 months","More than 6 months");
 	}
 	
-	@RequestMapping("")
-	public String list(ModelMap model) {
+//	@RequestMapping("")
+//	public String list(ModelMap model) {
+//		Long userId = Long.valueOf(session.getAttribute("userid").toString());
+//		List<Job> list = jobService.findAllByUserId(userId);
+//		
+//		model.addAttribute("myjobs", list);
+//		
+//		return "customer/jobs/mylist";
+//	}
+	
+	@GetMapping("")
+	public String search(ModelMap model,
+			@RequestParam(name ="titleSearch", required = false) String titleSearch,
+			@RequestParam("page") Optional<Integer> page,
+			@RequestParam("size") Optional<Integer> size) {
 		Long userId = Long.valueOf(session.getAttribute("userid").toString());
-		List<Job> list = jobService.findAllByUserId(userId);
+		int currentPage = page.orElse(1);
+		int pageSize = size.orElse(5);
 		
-		model.addAttribute("myjobs", list);
+		Pageable pageable = PageRequest.of(currentPage-1, pageSize, Sort.by("job_id").descending());
+		Page<Job> resultPage = null;
+		
+		if(StringUtils.hasText(titleSearch)) {
+			resultPage = jobService.findAllJobByTitleUserParam(userId, titleSearch, pageable);
+			model.addAttribute("titleSearch", titleSearch);
+		} else {
+			resultPage = jobService.findAllJobUserParam(userId, pageable);
+		}
+		
+		int totalPages = resultPage.getTotalPages();
+		if(totalPages > 0) {
+			int start = Math.max(1, currentPage - 2);
+			int end = Math.min(currentPage + 2, totalPages);
+			
+			if(totalPages > 5) {
+				if (end == totalPages) start = end - 5;
+				else if (start == 1) end = start + 5;
+			}
+			List<Integer> pageNumbers = IntStream.rangeClosed(start, end)
+					.boxed()
+					.collect(Collectors.toList());
+			
+			model.addAttribute("pageNumbers", pageNumbers);
+		}
+		
+		model.addAttribute("jobPage", resultPage);
 		
 		return "customer/jobs/mylist";
 	}

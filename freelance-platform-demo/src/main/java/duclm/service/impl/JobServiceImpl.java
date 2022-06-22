@@ -33,6 +33,27 @@ public class JobServiceImpl implements JobService {
 	}
 
 	@Override
+	public Page<Job> findAllJobHiring(Pageable pageable) {
+		return jobRepository.findAllJobHiring(pageable);
+	}
+
+	
+	@Override
+	public Page<Job> findAllJobByTitleUserParam(Long userid, String title, Pageable pageable) {
+		return jobRepository.findAllJobByTitleUserParam(userid, title, pageable);
+	}
+
+	@Override
+	public Page<Job> findAllJobUserParam(Long userid, Pageable pageable) {
+		return jobRepository.findAllJobUserParam(userid, pageable);
+	}
+
+	@Override
+	public Page<Job> findAllJobByTitleHiring(String title, Pageable pageable) {
+		return jobRepository.findAllJobByTitleHiring(title, pageable);
+	}
+
+	@Override
 	public <S extends Job> S save(S entity) {
 		entity.setStatus(1);
 

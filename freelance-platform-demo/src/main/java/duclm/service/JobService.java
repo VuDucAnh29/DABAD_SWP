@@ -86,4 +86,12 @@ public interface JobService {
 
 	<S extends Job> S saveWithStatus0(S entity);
 
+	Page<Job> findAllJobByTitleHiring(String title, Pageable pageable);
+
+	Page<Job> findAllJobHiring(Pageable pageable);
+
+	Page<Job> findAllJobUserParam(Long userid, Pageable pageable);
+
+	Page<Job> findAllJobByTitleUserParam(Long userid, String title, Pageable pageable);
+
 }

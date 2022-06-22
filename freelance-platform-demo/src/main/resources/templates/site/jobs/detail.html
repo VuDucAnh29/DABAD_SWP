@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{dashboardLayout.html}">
+
+<head>
+
+</head>
+
+<body>
+    <section class="row" layout:fragment="content">
+        <div class="col mt-4">
+            <div class="card">
+                <div class="card-header">
+                    <div class="row">
+                        <h2 class="col">Job detail</h2>
+                        <a th:href="@{/customer/jobs/edit/{id}(id=${job.jobId})}" th:if="${session.userid == job.userId}" class="btn btn-outline-warning"><i
+                            class="fas fa-edit float-right"></i></a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-7">
+                            <div class="form-group">
+                                <h4>Title</h4>
+                                <p th:text="${job.title}"></p>
+                            </div>
+                            <div class="form-group">
+                                <h4>Scope</h4>
+                                <p th:text="${job.scope}"></p>
+                            </div>
+                            <div class="form-group">
+                                <h4>Duration</h4>
+                                <p th:text="${job.duration}"></p>
+                            </div>
+
+                        </div>
+                        <div class="col-3">
+                            <div class="form-group">
+                                <h4>Budget</h4>
+                                <p th:text="${job.budget}"></p>
+                            </div>
+
+                            <div class="form-group">
+                                <h4>Type of project</h4>
+                                <p th:text="${jobField}"></p>
+                            </div>
+
+
+                            <div class="form-group">
+                                <h4>Tags</h4>
+                                <div>
+                                    <th:block th:each="tech : ${techList}" class="form-check-label">
+                                        <span th:text="${tech.name}"></span><span>, </span>
+                                    </th:block>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-group">
+                                <h4>Description</h4>
+                                <p th:text="${job.description}"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+</body>
+
+</html>

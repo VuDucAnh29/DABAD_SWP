@@ -4,15 +4,20 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.example.demoS.entity.UserAccount;
+
 
 @Controller
 public class HomeController extends AbstractController{
+//	@RequestMapping("/home")
+//	public String home(Model model) {
+//		UserAccount currentAccount = super.getCurrentUser();
+//		model.addAttribute("currentUser", currentAccount);
+//		return "site/welcome";
+//	}
+	
 	@RequestMapping("/")
-	public String home(Model model) {
-		UserAccount currentAccount = super.getCurrentUser();
-		model.addAttribute("currentUser", currentAccount);
-		return "site/welcome";
+	public String home() {
+		return "site/home";
 	}
 	
 	@RequestMapping("/403")

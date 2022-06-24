@@ -22,22 +22,19 @@ public class Field {
 
 	private long id;
 	private String name;
-	private String description;
 	private Set<Project> projects = new HashSet<Project>(0);
 
 	public Field() {
 	}
 
-	public Field(long id, String name, String description) {
+	public Field(long id, String name) {
 		this.id = id;
 		this.name = name;
-		this.description = description;
 	}
 
-	public Field(long id, String name, String description, Set<Project> projects) {
+	public Field(long id, String name, Set<Project> projects) {
 		this.id = id;
 		this.name = name;
-		this.description = description;
 		this.projects = projects;
 	}
 
@@ -59,15 +56,6 @@ public class Field {
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	@Column(name = "Description", nullable = false)
-	public String getDescription() {
-		return this.description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
 	}
 
 

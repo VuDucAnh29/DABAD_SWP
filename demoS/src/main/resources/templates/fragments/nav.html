@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<head>
+
+</head>
+
+<body>
+	<div th:fragment="nav">
+		<nav class="navbar navbar-expand-sm navbar-light bg-light">
+			<a class="navbar-brand" href="#">FULance</a>
+			<button class="navbar-toggler d-lg-none" type="button"
+				data-toggle="collapse" data-target="#collapsibleNavId"
+				aria-controls="collapsibleNavId" aria-expanded="false"
+				aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<!-- Guest -->
+			<div th:if="${session.userid == null}"
+				class="collapse navbar-collapse" id="collapsibleNavId">
+				<ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+					<li class="nav-item active"><a class="nav-link" th:href="@{/}">Home
+							<span class="sr-only">(current)</span>
+					</a></li>
+					<li class="nav-item"><a class="nav-link" th:href="@{/jobs}">View
+							available jobs</a></li>
+					<li class="nav-item"><a class="nav-link" th:href="@{/login}">Login</a>
+					</li>
+
+					<li  class="nav-item"><a class="nav-link" th:href="@{/}">Signup</a>
+					</li>
+
+					<li sec:authorize="hasAnyAuthority('ADMIN')" class="nav-item"><a class="nav-link" th:href="@{/user}">Profile</a>
+					</li>
+					
+					<li sec:authorize="hasAnyAuthority('CUSTOMER', 'ADMIN')" class="nav-item"><a class="nav-link" th:href="@{/customer}">Profile</a>
+					</li>
+					
+					<li sec:authorize="hasAnyAuthority('FREELANCER', 'ADMIN')" class="nav-item"><a class="nav-link" th:href="@{/freelance}">Profile</a>
+					</li>
+					
+					<li sec:authorize="hasAnyAuthority('CUSTOMER', 'FREELANCER', 'ADMIN')" class="nav-item"><a class="nav-link" th:href="@{/logout}">Logout</a>
+					</li>
+					
+				</ul>
+			</div>
+
+			<!-- Customer -->
+			<div th:if="${session.role == 2}" class="collapse navbar-collapse"
+				id="collapsibleNavId">
+				<ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+					<li class="nav-item active"><a class="nav-link" th:href="@{/}">Home
+							<span class="sr-only">(current)</span>
+					</a></li>
+					<li class="nav-item"><a class="nav-link" th:href="@{/jobs}">View
+							available jobs</a></li>
+					<li class="nav-item"><a class="nav-link"
+						th:href="@{/customer/jobs}">View my jobs</a></li>
+					<li class="nav-item">
+						<p class="nav-link" th:text="${session.email}"></p>
+					</li>
+					<li class="nav-item">
+						<p class="nav-link">Client</p>
+					</li>
+					<li class="nav-item"><a class="nav-link" th:href="@{/logout}">Logout</a>
+					</li>
+				</ul>
+			</div>
+
+			<!-- Freelancer -->
+			<div th:if="${session.role == 3}" class="collapse navbar-collapse"
+				id="collapsibleNavId">
+				<ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+					<li class="nav-item active"><a class="nav-link" th:href="@{/}">Home
+							<span class="sr-only">(current)</span>
+					</a></li>
+					<li class="nav-item"><a class="nav-link" th:href="@{/jobs}">View
+							available jobs</a></li>
+					<li class="nav-item">
+						<p class="nav-link">View my applications</p>
+					</li>
+					<li class="nav-item">
+						<p class="nav-link" th:text="${session.email}"></p>
+					</li>
+					<li class="nav-item">
+						<p class="nav-link">Freelancer</p>
+					</li>
+					<li class="nav-item"><a class="nav-link" th:href="@{/logout}">Logout</a>
+					</li>
+				</ul>
+			</div>
+
+			<!-- Admin -->
+			<div th:if="${session.role == 1}" class="collapse navbar-collapse"
+				id="collapsibleNavId">
+				<ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+					<li class="nav-item active"><a class="nav-link" th:href="@{/}">Home
+							<span class="sr-only">(current)</span>
+					</a></li>
+					<li class="nav-item"><a class="nav-link" th:href="@{/jobs}">View
+							available jobs</a></li>
+					<li class="nav-item"><a class="nav-link" th:href="">Manage
+							accounts</a></li>
+					<li class="nav-item"><a class="nav-link" th:href=""
+						th:text="${session.email}"></a></li>
+					<li class="nav-item"><a class="nav-link" th:href="">Admin</a>
+					</li>
+					<li class="nav-item"><a class="nav-link" th:href="@{/logout}">Logout</a>
+					</li>
+				</ul>
+			</div>
+		</nav>
+	</div>
+</body>
+
+</html>

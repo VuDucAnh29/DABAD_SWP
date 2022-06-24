@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+	integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+	crossorigin="anonymous">
+<link rel="stylesheet"
+	href="https://use.fontawesome.com/releases/v5.1.1/css/all.css"
+	integrity="sha384-O8whS3fhG2OnA5Kas0Y9l3cfpmYjapjI0E4theH4iuMD+pLhbf6JI0jIMfYcK3yZ"
+	crossorigin="anonymous">
+</head>
+<body>
+
+	<form action="#" th:action="@{/freelance/save}"
+		th:object="${freelanceAccount}" method="post">
+		<div th:object="${userAccount}">
+			<table id="table-1">
+				<tr>
+					<td>ID :</td>
+					<td><input type="text" th:field="*{id}" readonly="readonly" /></td>
+				</tr>
+
+				<tr>
+					<td>Avatar :</td>
+					<td><input type="text" th:field="*{avatar}" /></td>
+				</tr>
+
+				<tr>
+					<td>Name :</td>
+					<td><input type="text" th:field="*{fullName}" /></td>
+				</tr>
+
+				<tr>
+					<td>Email :</td>
+					<td><input type="text" th:field="*{email}" /></td>
+				</tr>
+
+				<tr>
+					<td>create_date :</td>
+					<td><input type="text" th:field="*{createDate}" /></td>
+				</tr>
+
+				<tr>
+					<td>update_date :</td>
+					<td><input type="text" th:field="*{updateDate}" /></td>
+				</tr>
+
+				<tr>
+					<td>status</td>
+					<td><input type="text" id="status" name="status" value="1" /></td>
+				</tr>
+
+				<tr>
+					<td>balance</td>
+					<td><input type="number" th:field="*{balance}" /></td>
+				</tr>
+
+				<tr>
+					<td>password</td>
+					<td><input type="password" th:field="*{password}" /></td>
+				</tr>
+
+
+				<tr>
+					<td></td>
+					<td colspan="2"></td>
+				</tr>
+
+			</table>
+		</div>
+
+		<div>
+			<label for="description">Description</label>
+			<textarea class="form-control" th:object="${freelanceOverview}"
+				name="description" id="description" th:value="${freelanceOverview}"
+				th:text="${freelanceOverview}" rows="5"></textarea>
+		</div>
+
+		<div th:object="${techs}">
+			<label for="">Add tags for this project</label> <br /> <input
+				type="text" value="" name="searchColumn" id="searchColumn" />
+			<th:block th:each="tech : ${techList}" class="form-check-label">
+				<div class="checkbox">
+					<input class="checkboxInput" type="checkbox" th:name="techChecked"
+						th:value="${tech.name}"
+						th:checked="${freelanceTech.contains(tech.name)}" /> <label
+						th:text="${tech.name}"></label> <br />
+				</div>
+			</th:block>
+		</div>
+		<input type="text" th:id="${freelanceAccount.id}"
+			th:value="${freelanceAccount.id}" th:name="freelanceId"
+			readonly="readonly">
+		<button type="submit">Save</button>
+	</form>
+	<script>
+        var checkboxDivs = document.querySelectorAll('.checkbox');
+
+        document.querySelector('#searchColumn').addEventListener("input", function (e) {
+            var inputValue = e.srcElement.value.toLowerCase();
+
+
+            if (inputValue.length != 0) {
+                for (var i = 0; i < checkboxDivs.length; i++) {
+                    var checkbox = checkboxDivs[i].children[0];
+                    if (checkbox.value.toLowerCase().includes(inputValue) && inputValue.length != 0) {
+                        checkboxDivs[i].style.display = 'block';
+                    } else {
+                        checkboxDivs[i].style.display = 'none';
+                    }
+                }
+            } else {
+                for (var i = 0; i < checkboxDivs.length; i++) {
+                    var checkbox = checkboxDivs[i].children[0];
+                    checkboxDivs[i].style.display = 'block';
+                }
+            }
+        });
+
+        var valueList = document.getElementById('valueList');
+        var listArray = [];
+
+        var checkboxes = document.querySelectorAll('.checkboxInput');
+
+        for (var checkbox of checkboxes) {
+            checkbox.addEventListener('click', function () {
+                if (this.checked == true) {
+                    listArray.push(this.value);
+                    valueList.innerHTML =  listArray.join(' / ');
+                } else {
+                    listArray = listArray.filter(e => e!==this.value);
+                    valueList.innerHTML =  listArray.join(' / ');
+                }
+            })
+        }
+    </script>
+</body>
+</html>

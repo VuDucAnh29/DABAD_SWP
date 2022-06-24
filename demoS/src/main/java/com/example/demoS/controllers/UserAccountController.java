@@ -21,6 +21,7 @@ import com.example.demoS.entity.Role;
 import com.example.demoS.entity.UserAccount;
 
 import com.example.demoS.model.UserAccountDTO;
+import com.example.demoS.service.ProjectService;
 import com.example.demoS.service.RoleService;
 import com.example.demoS.service.UserAccountService;
 
@@ -86,11 +87,6 @@ public class UserAccountController extends AbstractController{
 		return mav;
 	}
 	
-	@RequestMapping("/user/delete/{id}")
-	public String deleteUser(@PathVariable("id") long id) {
-		UserAccount userAccount = userService.getById(id);
-		userService.deActive(userAccount);
-		return "redirect:/user";
-	}
+	
 	
 }

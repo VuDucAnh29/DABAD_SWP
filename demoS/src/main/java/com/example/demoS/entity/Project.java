@@ -5,6 +5,8 @@ package com.example.demoS.entity;
 
 import java.util.HashSet;
 import java.util.Set;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -12,6 +14,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -31,32 +35,32 @@ public class Project {
 	private String description;
 	private String duration;
 	private String scope;
-	private int hrsPerWeek;
-	private int maximumBudget;
+	private int budget;
 	private int status;
 	private String createDate;
 	private String updateDate;
+	private Set<Tech> tech = new HashSet<Tech>(0);
 	private Set<Apply> applies = new HashSet<Apply>(0);
 
 	public Project() {
 	}
 
 	public Project(long id, Field field, String title, String description, String duration,
-			String scope, int hrsPerWeek, int maximumBudget, int status) {
+			String scope,  int budget, int status) {
 		this.id = id;
 		this.field = field;
 		this.title = title;
 		this.description = description;
 		this.duration = duration;
 		this.scope = scope;
-		this.hrsPerWeek = hrsPerWeek;
-		this.maximumBudget = maximumBudget;
+		this.budget = budget;
 		this.status = status;
+		
 	}
 
 	public Project(long id, CustomerAccount customerAccount, Field field, String title, String description,
-			String duration, String scope, int hrsPerWeek, int maximumBudget, int status, String createDate,
-			String updateDate, Set<Apply> applies) {
+			String duration, String scope, int budget, int status, String createDate,
+			String updateDate, Set<Apply> applies,Set<Tech> tech) {
 		this.id = id;
 		this.customerAccount = customerAccount;
 		this.field = field;
@@ -64,12 +68,12 @@ public class Project {
 		this.description = description;
 		this.duration = duration;
 		this.scope = scope;
-		this.hrsPerWeek = hrsPerWeek;
-		this.maximumBudget = maximumBudget;
+		this.budget = budget;
 		this.status = status;
 		this.createDate = createDate;
 		this.updateDate = updateDate;
 		this.applies = applies;
+		this.tech = tech;
 	}
 
 	@Id
@@ -139,22 +143,15 @@ public class Project {
 		this.scope = scope;
 	}
 
-	@Column(name = "HrsPerWeek", nullable = false)
-	public int getHrsPerWeek() {
-		return this.hrsPerWeek;
+
+
+	@Column(name = "budget", nullable = false)
+	public int getBudget() {
+		return this.budget;
 	}
 
-	public void setHrsPerWeek(int hrsPerWeek) {
-		this.hrsPerWeek = hrsPerWeek;
-	}
-
-	@Column(name = "MaximumBudget", nullable = false)
-	public int getMaximumBudget() {
-		return this.maximumBudget;
-	}
-
-	public void setMaximumBudget(int maximumBudget) {
-		this.maximumBudget = maximumBudget;
+	public void setBudget(int budget) {
+		this.budget = budget;
 	}
 
 	@Column(name = "Status", nullable = false)
@@ -192,6 +189,20 @@ public class Project {
 
 	public void setApplies(Set<Apply> applies) {
 		this.applies = applies;
+	}
+	
+	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "project_techs",
+            joinColumns = @JoinColumn(name = "project_id"),
+            inverseJoinColumns = @JoinColumn(name = "tech_id")
+            )
+	public Set<Tech> getTech() {
+		return this.tech;
+	}
+
+	public void setTech(Set<Tech> tech) {
+		this.tech = tech;
 	}
 
 }

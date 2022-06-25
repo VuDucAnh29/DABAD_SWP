@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{dashboardLayout.html}">
+
+<head>
+
+</head>
+
+<body>
+    <section class="row" layout:fragment="content">
+        <div class="col mt-4">
+            <div class="card">
+                <div class="card-header">
+                    <h2>My job list</h2>
+                </div>
+                <div class="card-body">
+                    <div th:if="${message!=null}" class="alert alert-primary" role="alert">
+                        <i>[[${message}]]</i>
+                    </div>
+                    <div class="row mt-2 mb-2">
+                        <div class="col">
+                            <form th:action="@{/customer/jobs}">
+                                <div class="form-inline float-left mr-5">
+                                    <label for="titleSearch">Search by title: </label>
+                                    <input type="text" class="form-control ml-2" name="titleSearch" id="titleSearch"
+                                        aria-describedby="helpId" placeholder="Title" th:value="${titleSearch}">
+                                    <button class="btn btn-outline-primary ml-2">Search</button>
+                                </div>
+                                <div class="form-inline">
+                                    <label for="fieldId">Field</label>
+                                    <select class="form-control" name="fieldSearch" id="fieldSearch" th:value="${fieldSearch}">
+                                        <option value="">All fields</option>
+                                        <option th:each="item:${fields}" th:value="${item.fieldId}" th:selected="${fieldSearch == item.fieldId}"
+                                            th:text="${item.name}">Field</option>
+                                    </select>
+                                </div>
+                            </form>
+                            <div class="float-right" th:if="${session.role == 2}">
+                                <a class="btn btn-outline-primary" th:href="@{/customer/jobs/add}">Add
+                                    new jobs</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row" th:if="${!jobPage.hasContent()}">
+                        <div class="col">
+                            <div class="alert alert-danger" role="alert">
+                                <strong>No jobs found</strong>
+                            </div>
+                        </div>
+                    </div>
+
+                    <table th:if="${jobPage.hasContent()}" class="table table-striped table-inverse">
+                        <thead class="thead-inverse">
+                            <tr>
+                                <th>Title</th>
+                                <th>Scope</th>
+                                <th>Duration</th>
+                                <th>Budget</th>
+                                <th>Field</th>
+                                <th>Status</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="item, iStat : ${jobPage.content}">
+                                <td th:text="${item.title}">
+                                <td th:text="${item.scope}"></td>
+                                <td th:text="${item.duration}"></td>
+                                <td th:text="${item.budget}"></td>
+                                <td th:text="${item.field.name}"></td>
+                                <th:block th:switch="${item.status}">
+                                    <td th:case="1" th:text="Hiring"></td>
+                                    <td th:case="2" th:text="On-going"></td>
+                                    <td th:case="3" th:text="Completed"></td>
+                                </th:block>
+                                <td>
+                                    <a th:href="@{/jobs/detail/{id}(id=${item.jobId})}" class="btn btn-outline-info"><i
+                                            class="fas fa-info"></i></a>
+                                    <a th:href="@{/customer/jobs/edit/{id}(id=${item.jobId})}"
+                                        class="btn btn-outline-warning"><i class="fas fa-edit"></i></a>
+                                    <a th:data-id="${item.jobId}" th:data-name="${item.title}"
+                                        onclick="showConfirmModalDialog(this.getAttribute('data-id'),this.getAttribute('data-name'))"
+                                        class="btn btn-outline-danger"><i class="fas fa-recycle"></i></a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <script>
+                        function showConfirmModalDialog(id, title) {
+                            $('#jobTitle').text(title);
+                            $('#yesOption').attr('href', '/customer/jobs/delete/' + id);
+                            $('#confirmationId').modal('show');
+                        }
+                    </script>
+                    <!-- Modal -->
+                    <div class="modal fade" id="confirmationId" tabindex="-1" role="dialog"
+                        aria-labelledby="modelTitleId" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Confirmation</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    Do you want to delete "<span id="jobTitle"></span>"?
+                                </div>
+                                <div class="modal-footer">
+                                    <a id="yesOption" type="button" class="btn btn-danger">Yes</a>
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer text-muted">
+                    <nav aria-label="Page navigation" th:if="${jobPage.totalPages > 0}">
+                        <ul class="pagination justify-content-center">
+                            <li th:class="${ 1 == jobPage.number + 1} ? 'page-item active' : 'page-item' ">
+                                <a th:href="@{/customer/jobs(titleSearch=${titleSearch}, fieldSearch=${fieldSearch}, size=${jobPage.size}, page=${1})}"
+                                    class="page-link">First</a>
+                            </li>
+
+                            <li class="page-item active" th:each="pageNumber : ${pageNumbers}"
+                                th:if="${jobPage.totalPages > 1}"
+                                th:class="${ pageNumber == jobPage.number + 1} ? 'page-item active' : 'page-item'">
+                                <a th:href="@{/customer/jobs(titleSearch=${titleSearch}, fieldSearch=${fieldSearch}, size=${jobPage.size}, page=${pageNumber})}"
+                                    class="page-link" th:text="${pageNumber}"></a>
+                            </li>
+
+                            <li
+                                th:class="${ jobPage.totalPages == jobPage.number + 1} ? 'page-item active' : 'page-item' ">
+                                <a th:href="@{/customer/jobs(titleSearch=${titleSearch}, fieldSearch=${fieldSearch}, size=${jobPage.size}, page=${jobPage.totalPages})}"
+                                    class="page-link">Last</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+
+</html>

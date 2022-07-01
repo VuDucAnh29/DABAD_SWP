@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{dashboardLayout.html}">
+
+<head>
+
+</head>
+
+<body>
+    <section class="row" layout:fragment="content">
+        <div class="col mt-4">
+            <div>
+                <h3>Job detail</h3>
+                <a th:href="@{/customer/jobs/edit/{id}(id=${job.jobId})}"
+                    th:if="${session.userid == job.userId && job.status==1}" class="btn btn-warning"><i
+                        class="fas fa-edit fa-fw"></i></a>
+                <a th:data-id="${job.jobId}" th:data-name="${job.title}"
+                    th:if="${session.userid == job.userId && job.status==1}"
+                    onclick="showConfirmModalDialog(this.getAttribute('data-id'),this.getAttribute('data-name'))"
+                    class="btn btn-danger"><i class="fas fa-recycle fa-fw"></i></a>
+            </div>
+
+            <div class="card mt-3">
+                <div class="card-body">
+                    <div th:if="${message!=null}" class="alert alert-primary" role="alert">
+                        <i>[[${message}]]</i>
+                    </div>
+                    <div class="row">
+                        <div class="col-9">
+                            <h4 th:text="${job.title}"></h4>
+                            <hr>
+                            <h6 th:text="${jobField}"></h6>
+                            <p>Posted ... days ago</p>
+                            <hr>
+                            <p th:text="${job.description}"></p>
+                            <hr>
+                            <div class="row">
+                                <div class="col-4">
+                                    <i class="fa fa-users" aria-hidden="true"></i>
+                                    <p th:text="${job.scope}" style="margin-bottom: 0;"></p>
+                                    <p style="font-size: 90%; opacity: 90%;">Scope</p>
+                                </div>
+                                <div class="col-4">
+                                    <i class="fa fa-calendar" aria-hidden="true"></i>
+                                    <p th:text="${job.duration}" style="margin-bottom: 0;"></p>
+                                    <p style="font-size: 90%; opacity: 90%;">Duration</p>
+                                </div>
+                                <div class="col-4">
+                                    <i class="fa fa-credit-card" aria-hidden="true"></i>
+                                    <p style="margin-bottom: 0;"
+                                        th:text="${#numbers.formatDecimal(job.budget, 0, 'COMMA', 0, 'POINT') + 'VND'}">
+                                    </p>
+                                    <p style="font-size: 90%; opacity: 90%;">Budget</p>
+                                </div>
+                            </div>
+                            <hr>
+                            <h6>Project status</h6>
+                            <th:block th:switch="${job.status}">
+                                <p th:case="1" th:text="Hiring"></p>
+                                <p th:case="2" th:text="On-going"></p>
+                                <p th:case="3" th:text="Completed"></p>
+                            </th:block>
+                            <hr>
+
+                            <div class="form-group">
+                                <h5>Skills and Expertise</h5>
+                                <div class="mt-3">
+                                    <th:block th:each="tech : ${techList}" class="form-check-label">
+                                        <span class="badge badge-pill badge-outline border"
+                                            th:text="${tech.name}"></span>
+                                    </th:block>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-3 border-left">
+                            <div class="float-left text-center" th:if="${job.status==2 && session.userid == job.userId}">
+                                <a class="btn btn btn-info mb-3 mt-3">Go to report page</a>
+                                <p style="font-size: 90%; opacity: 90%;">A freelancer was hired for this job. Click the above button to go to report page</p>
+                                <hr>
+                            </div>
+                            <div th:if="${session.userid == null}" class="text-center">
+                                <a class="btn btn btn-success mb-3 mt-3" th:href="@{/signin}">Submit a proposal</a>
+                                <p style="font-size: 90%; opacity: 90%;">Login as a freelancer before submit a proposal
+                                </p>
+                                <hr>
+                            </div>
+                            <div th:if="${session.role == 3}">
+                                <div th:if="${!isApplied && job.status==1}" class="text-center">
+                                    <a class="btn btn btn-success mb-3 mt-3"
+                                        th:href="@{/freelancer/proposals/add/{id}(id=${job.jobId})}">Submit a
+                                        proposal</a>
+                                </div>
+                                <div th:if="${isApplied && job.status==1}" class="text-center">
+                                    <a class="btn btn btn-warning mb-3 mt-3"
+                                        th:href="@{/proposals/detail/{id}(id=${proposalId})}">View your proposal</a>
+                                    <p style="font-size: 90%; opacity: 90%;">You have submitted a proposal</p>
+                                </div>
+                                <div th:if="${isApplied && job.status==2}" class="text-center">
+                                    <a class="btn btn btn-info mb-3 mt-3">Go to report page</a>
+                                    <p style="font-size: 90%; opacity: 90%;">You have been hired for this job, click the
+                                        above button to go to report page</p>
+                                </div>
+                                <hr>
+                            </div>
+
+                            <h4 class="mb-4">About the client</h4>
+                            <a style="color: black; font-size: 150%;" th:text="${jobOwner.name}"
+                                th:href="@{/profile/{id}(id=${jobOwner.userId})}"></a>
+                            <br><br><i class="fa fa-envelope mt-4" aria-hidden="true"></i>
+                            <span th:text="${jobOwner.email}"></span>
+                            <br><br><i class="fa fa-phone" aria-hidden="true"></i>
+                            <span th:text="${jobOwner.phone}"></span>
+                            <br><br><i class="fa fa-building" aria-hidden="true"></i>
+                            <span th:text="${ownerProfile.company}"></span>
+                            <br><br>
+                            <p>Jobs posted: ...</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="mt-3">
+                <div class="row" th:if="${session.userid == job.userId}">
+                    <div class="col" th:if="${job.status==1}">
+                        <hr>
+                        <div class="row" th:if="${proposalList.isEmpty()}">
+                            <div class="col">
+                                <div class="alert alert-secondary" role="alert">
+                                    <p>This job doesn't have any proposal yet...</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div th:if="${!proposalList.isEmpty()}">
+                            <h5>Proposals of this job:</h5>
+                            <div th:each="item, iStat : ${proposalList}">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-2">
+                                                <div class="form-group">
+                                                    <img id="image"
+                                                        th:src="${item.user.avatar!=null? '/images/'+ item.user.avatar:'images/noimage.jpg'}"
+                                                        class="rounded-3 " style="width: 150px;" alt="Avatar">
+                                                </div>
+                                            </div>
+                                            <div class="col-10">
+                                                <div class="row">
+                                                    <div class="col-6">
+                                                        <a style="color: black; font-size: 125%;" class="mb-3"
+                                                            th:text="${item.user.name}"
+                                                            th:href="@{/profile/{id}(id=${item.user.userId})}"></a>
+                                                        <p>Freelancer</p>
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <div
+                                                            th:if="${item.status == 1 && item.job.user.userId == session.userid}">
+                                                            <div class="float-right ml-3 mr-3">
+                                                                <a class="btn btn-danger"
+                                                                    th:href="@{/customer/proposals/reject/{id}(id=${item.proposalId})}">Reject</a>
+                                                            </div>
+                                                            <div class="float-right">
+                                                                <a class="btn btn-success"
+                                                                    th:href="@{/customer/proposals/approve/{id}(id=${item.proposalId})}">Approve</a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <p style="font-size: 90%; opacity: 90%;">Bid: <span
+                                                        th:text="${#numbers.formatDecimal(item.bid, 0, 'COMMA', 0, 'POINT')}"></span>VND
+                                                </p>
+                                                <p>Apply to job: <a th:text="${item.job.title}"
+                                                        th:href="@{/jobs/detail/{id}(id=${item.job.jobId})}"></a>
+                                                </p>
+                                                <div style="height: 75px; text-overflow: ellipsis; white-space: wrap;
+                                                overflow: hidden;" th:text="${item.description}"></div>
+                                                <a th:href="@{/proposals/detail/{id}(id=${item.proposalId})}"
+                                                    class="mb-3">Read more...</a>
+                                                <p class="mt-3">Skills:</p>
+                                                <ul class="list-inline my-0">
+                                                    <li class="list-inline-item border"
+                                                        th:each="tech, iStat : ${item.user.freelancerProfile.techs}">
+                                                        <span class="badge badge-pill badge-outline"
+                                                            th:text="${tech.name}"></span>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script>
+            function showConfirmModalDialog(id, title) {
+                $('#jobTitle').text(title);
+                $('#yesOption').attr('href', '/customer/jobs/delete/' + id);
+                $('#confirmationId').modal('show');
+            }
+        </script>
+        <!-- Modal -->
+        <div class="modal fade" id="confirmationId" tabindex="-1" role="dialog" aria-labelledby="modelTitleId"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Confirmation</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        Do you want to delete "<span id="jobTitle"></span>"?
+                    </div>
+                    <div class="modal-footer">
+                        <a id="yesOption" type="button" class="btn btn-danger">Yes</a>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+
+</html>

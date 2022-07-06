@@ -22,3 +22,8 @@ NOTES:
 1 - Processing
 2 - Approved
 
+#Report status
+0-Rejected
+1-Processing
+2-Approved
+

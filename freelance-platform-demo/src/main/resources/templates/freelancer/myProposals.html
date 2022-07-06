@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{dashboardLayout.html}">
+
+<head>
+
+</head>
+
+<body>
+    <section class="row" layout:fragment="content">
+        <div class="col mt-4">
+            <div class="card">
+                <div class="card-header">
+                    <h2>My proposal list</h2>
+                </div>
+                <div class="card-body">
+                    <div th:if="${message!=null}" class="alert alert-primary" role="alert">
+                        <i>[[${message}]]</i>
+                    </div>
+                    <div class="row mt-2 mb-2">
+                        <div class="col">
+                            <form th:action="@{/freelancer/proposals}">
+                                <div class="form-inline float-left mr-5">
+                                    <label for="titleSearch">Search by job title: </label>
+                                    <input type="text" class="form-control ml-2" name="titleSearch" id="titleSearch"
+                                        aria-describedby="helpId" placeholder="Title" th:value="${titleSearch}">
+                                    <button class="btn btn-outline-primary ml-2">Search</button>
+                                </div>
+                                <div class="form-inline">
+                                    <label for="fieldId">Status</label>
+                                    <select class="form-control" name="statusSearch" id="statusSearch"
+                                        th:value="${statusSearch}">
+                                        <option value="-1">All</option>
+                                        <option value="0"
+                                            th:selected="${statusSearch!=null && statusSearch.equals('0')}">Rejected
+                                        </option>
+                                        <option value="1"
+                                            th:selected="${statusSearch!=null && statusSearch.equals('1')}">Processing
+                                        </option>
+                                        <option value="2"
+                                            th:selected="${statusSearch!=null && statusSearch.equals('2')}">Approved
+                                        </option>
+                                    </select>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="row" th:if="${!proposalPage.hasContent()}">
+                        <div class="col">
+                            <div class="alert alert-danger" role="alert">
+                                <strong>No proposal found</strong>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div th:if="${proposalPage.hasContent()}">
+                        <div th:each="item, iStat : ${proposalPage.content}">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <a style="color: black; font-size: 125%;" class="mb-3"
+                                                th:text="${item.job.title}"
+                                                th:href="@{/jobs/detail/{id}(id=${item.job.jobId})}"></a>
+                                        </div>
+                                        <div class="col-6">
+                                            <th:block th:switch="${item.status}">
+                                                <p style="color: brown;" class="float-right" th:case="0"
+                                                    th:text="Rejected"></p>
+                                                <p style="color: darkgoldenrod;" class="float-right" th:case="1"
+                                                    th:text="Processing"></p>
+                                                <p style="color: green;" class="float-right" th:case="2"
+                                                    th:text="Approved"></p>
+                                            </th:block>
+                                        </div>
+                                    </div>
+                                    <p style="font-size: 90%; opacity: 90%;">Bid: <span th:text="${#numbers.formatDecimal(item.bid, 0, 'COMMA', 0, 'POINT')}"></span>VND
+                                    </p>
+                                    <div style="height: 75px; text-overflow: ellipsis; white-space: wrap;
+                                            overflow: hidden;" th:text="${'Cover letter: '  + item.description}"></div>
+                                    <a th:href="@{/proposals/detail/{id}(id=${item.proposalId})}" class="mb-3">Read
+                                        more...</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer text-muted">
+                    <nav aria-label="Page navigation" th:if="${proposalPage.totalPages > 0}">
+                        <ul class="pagination justify-content-center">
+                            <li th:class="${ 1 == proposalPage.number + 1} ? 'page-item active' : 'page-item' ">
+                                <a th:href="@{/freelancer/proposals(titleSearch=${titleSearch}, statusSearch=${statusSearch}, size=${proposalPage.size}, page=${1})}"
+                                    class="page-link">First</a>
+                            </li>
+
+                            <li class="page-item active" th:each="pageNumber : ${pageNumbers}"
+                                th:if="${proposalPage.totalPages > 1}"
+                                th:class="${ pageNumber == proposalPage.number + 1} ? 'page-item active' : 'page-item'">
+                                <a th:href="@{/freelancer/proposals(titleSearch=${titleSearch}, statusSearch=${statusSearch}, size=${proposalPage.size}, page=${pageNumber})}"
+                                    class="page-link" th:text="${pageNumber}"></a>
+                            </li>
+
+                            <li
+                                th:class="${ proposalPage.totalPages == proposalPage.number + 1} ? 'page-item active' : 'page-item' ">
+                                <a th:href="@{/freelancer/proposals(titleSearch=${titleSearch}, statusSearch=${statusSearch}, size=${proposalPage.size}, page=${proposalPage.totalPages})}"
+                                    class="page-link">Last</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+
+</html>

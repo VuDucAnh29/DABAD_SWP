@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Bean;
 
 
 @SpringBootApplication
-@EnableAutoConfiguration(exclude = {ErrorMvcAutoConfiguration.class})
+
 public class FreelancePlatformDemoApplication {
 
 	public static void main(String[] args) {

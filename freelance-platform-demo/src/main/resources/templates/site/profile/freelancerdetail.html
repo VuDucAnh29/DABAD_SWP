@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{dashboardLayout_copy.html}">
+
+<head>
+
+</head>
+
+<body>
+    <section class="row" layout:fragment="content">
+        <style>
+            .skill-span {
+                color: black;
+                background-color: rgb(214, 214, 214);
+                margin-right: 0.8rem;
+                margin-bottom: 0.3rem;
+                border-radius: 50px;
+            }
+        </style>
+        <div class="col mt-4">
+            <div class="card mb-3">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-3 d-flex justify-content-center">
+                            <img th:src="${user.avatar!=null? user.avatar:'https://storage.cloud.google.com/freelance-c87e4.appspot.com/default.jpg'}"
+                                alt class="rounded-circle" style="width: 180px;" />
+                        </div>
+                        <div class="col-7 d-flex align-items-center">
+                            <div class="d-flex flex-column">
+                                <p th:text="${user.name}" style="font-weight: 450; font-size: 180%; color: black;"></p>
+                                <p style="font-size: 130%; color: black;">Freelancer</p>
+                            </div>
+                        </div>
+                        <div class="col-2">
+                            <a th:if="${session.userid == user.userId}" style="font-size: 150%;"
+                                th:href="@{/profile/edit/{id}(id=${session.userid})}">
+                                <i class="fas fa-edit float-right"></i></a>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-3 border-right">
+                            <p style="font-size: 130%; color: black;">Contact Information</p>
+
+                            <div class="mt-4 mb-4">
+                                <i style="color: black" class="fa fa-envelope" aria-hidden="true"></i>
+                                <span style="color: black" th:text="${user.email}"></span>
+                            </div>
+                            <div class="mb-4">
+                                <i style="color: black" class="fa fa-phone" aria-hidden="true"></i>
+                                <span style="color: black" th:text="${user.phone}"></span>
+                            </div>
+                            <div>
+                                <p style="color: black"
+                                    th:text="'Join date: '+${#temporals.format(user.createdAt, 'MMMM dd, yyyy')}"></p>
+                            </div>
+                        </div>
+
+                        <div class="col-9">
+                            <div class="form-group">
+                                <p style="font-size: 130%; color: black;">Overview</p>
+                                <p style="color: black;" th:text="${user.description}"></p>
+                            </div>
+                            <hr>
+                            <p style="font-size: 130%; color: black;">Skills</p>
+                            <div>
+                                <th:block th:each="tech : ${techList}" class="form-check-label">
+                                    <span class="badge badge-pill badge-outline skill-span" style="font-style: 75%;"
+                                        th:text="${tech.name}"></span>
+                                </th:block>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+
+</html>
